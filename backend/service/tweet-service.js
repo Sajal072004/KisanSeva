@@ -11,8 +11,9 @@ class TweetService{
         const content=data.content;
 
         //hashtags will be in content
-        const tags=content.match(/#[a-zA-Z0-9_]+/g).map((tag)=>tag.substring(1))
-        .map((tag)=>tag.toLowerCase());
+        const tagsMatch = content.match(/#[a-zA-Z0-9_]+/g);
+        const tags = tagsMatch ? tagsMatch.map((tag) => tag.substring(1).toLowerCase()) : [];
+
 
         const tweet=await this.tweetRepository.create(data);
 
