@@ -4,7 +4,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import {PORT}  from '../config/server-config.js'
 import { connectDB } from '../config/db.js'
-import userRoutes from '../routes/user-route.js'
+import apiRoutes from '../routes/index.js'
 import cookieParser from 'cookie-parser'
 
 //Middlewares
@@ -21,7 +21,7 @@ app.disable('x-powered-by');    //less hackers will know about our stack
 connectDB();
 
 //Routes
-app.use('/api/user',userRoutes);
+app.use('/api',apiRoutes);
 
 const setup_and_start_server=async()=>{
     app.listen(PORT,()=>{

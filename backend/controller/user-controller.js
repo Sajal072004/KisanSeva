@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { JWT_SECRET } from "../config/server-config.js";
 import nodemailer from 'nodemailer'
+import { APP_PASS } from "../config/server-config.js";
 
 const loginUser=async (req,res)=>{
     const {email,password}=req.body;
@@ -45,7 +46,7 @@ const createToken=(id)=>{
 }
 
 const registerUser=async(req,res)=>{
-    const {name,email,password,phone,address}=req.body;
+    const {name,email,password,phone,address,gender}=req.body;
     try {
         const exists=await userModel.findOne({email});
         if(exists){
@@ -72,7 +73,8 @@ const registerUser=async(req,res)=>{
             email:email,
             password:hashedPassword,
             phone:phone,
-            address:address
+            address:address,
+            gender:gender
         })
 
         const user=await newUser.save();
@@ -95,20 +97,94 @@ const forget=async (req,res)=>{
     const {email}=req.body;
     try {
         const generateOtp=Math.floor(100000 + Math.random() * 900000);      //6 digit otp
-        var transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
+        console.log(generateOtp);
+        const transporter = nodemailer.createTransport({
+            service:'gmail',
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false, // Use `true` for port 465, `false` for all other ports
             auth: {
-              user: "abfc0bbef1a1e2",
-              pass: "4da84564a8f923"
-            }
+              user: "krishiseva27@gmail.com",
+              pass: APP_PASS,
+            },
           });
 
           const info = await transporter.sendMail({
-            from: "krishisevakr@gmail.com", 
+            from: "krishiseva@gmail.com", 
             to: email, // list of receivers
             subject: "New Otp generated", // Subject line
-            html: `<b>Otp is : <i>${generateOtp}</i></b>`, // html body
+            html: `<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Email</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background-color: #1b7a43; /* Dark Green */
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .content {
+      padding: 20px;
+    }
+    .otp {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1b7a43; /* Dark Green */
+      background-color: #eaf5ea; /* Light Green Background */
+      padding: 10px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    .footer {
+      background-color: #f1f1f1;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: #666666;
+    }
+    .footer a {
+      color: #1b7a43; /* Dark Green */
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      Krishi Seva
+    </div>
+    <div class="content">
+      <p>Dear User,</p>
+      <p>Below is your One-Time Password (OTP) which you can use to complete the sign-up or sign-in process:</p>
+      <p class="otp">${generateOtp}</p>
+      <p>Please use this OTP promptly to access your account. For your security, do not share this OTP with anyone else. If you did not request this OTP, please disregard this email.</p>
+      <p>For any queries or assistance, feel free to contact our support team. We are here to help you.</p>
+      <p>Thank you for choosing Krishi Seva. We look forward to serving you.</p>
+    </div>
+    <div class="footer">
+      <p>&copy; 2024 Krishi Seva. All rights reserved.</p>
+      <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </div>
+</body>`, // html body
           });
 
           if(info.messageId){

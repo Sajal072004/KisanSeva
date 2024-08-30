@@ -22,13 +22,15 @@ const userSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    profilePicture:{
+    gender:{
         type:String,
+        required:true
     },
     otp:{
         type:Number,
         default:0
-    }
+    },
+    
     
 },{timestamps:true});
 
