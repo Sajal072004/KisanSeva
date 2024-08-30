@@ -45,3 +45,24 @@ export const getTweet=async (req,res)=>{
         })
     }
 }
+
+export const getAllTweetsOfUser=async (req,res)=>{
+    try {
+        const response=await tweetService.allTweetsOfUser(req.body.userId);
+        console.log(response);
+        return res.status(202).json({
+            success:true,
+            data:response,
+            err:{},
+            message:"Successfully fetched all the tweets of that user"
+        })
+    } catch (error) {
+        console.log("Error in tweet controller in getting tweets",error);
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server Error",
+            err:error,
+            data:{}
+        })
+    }
+}

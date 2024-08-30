@@ -15,6 +15,15 @@ class TweetRepository{
         }
     }
 
+    async allTweetsOfUser(userId){
+        try {
+            const tweets=await Tweet.find({userId});
+            return tweets;
+        } catch (error) {
+            console.log("Error in tweet repo in all tweet function",error)
+        }
+    }
+
 
     async getWithComments(id){
         try {                                                       //comments jo tum schema mein likhe ho

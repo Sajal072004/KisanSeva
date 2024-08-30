@@ -39,6 +39,15 @@ class TweetService{
         return tweet;
     }
 
+    async allTweetsOfUser(userId){
+        try {
+            const tweets=await this.tweetRepository.allTweetsOfUser(userId);
+            return tweets;
+        } catch (error) {
+            console.log("Error in tweet service in fetching tweets",error);
+        }
+    }
+
 }
 
 export default TweetService;
