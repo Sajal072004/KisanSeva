@@ -4,6 +4,7 @@ import { createTweet,getAllTweetsOfUser,getTweet } from '../../controller/tweet-
 import toggleLike from '../../controller/like-controller.js';
 import createComment from '../../controller/comment-controller.js';
 import { forget, loginUser,registerUser, verify } from '../../controller/user-controller.js'
+import {createCrop, deleteCrop, getAllCrops, getCrop, updateCrop} from '../../controller/crop-controller.js'
 
 const router=express.Router();
 
@@ -19,6 +20,13 @@ router.get('/mytweets/:id',getAllTweetsOfUser);
 router.post('/likes/toggle',toggleLike);
 
 router.post('/comments',createComment);
+
+router.post('/crops',createCrop);
+router.get('/crops',getAllCrops);
+router.delete('/crops/:id',deleteCrop);
+router.patch('/crops/:id',updateCrop);      //localhost:3000/api/v1/crops/66d6204b7e43fbe262bc6d67
+router.get('/crops/:id',getCrop);
+
 
 
 export default router;

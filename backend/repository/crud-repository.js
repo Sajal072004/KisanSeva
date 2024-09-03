@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 class CrudRepository{
     constructor(model){
         this.model=model;
@@ -25,12 +27,15 @@ class CrudRepository{
         }
     }
 
-    async get(id){
+    async get(id) {
         try {
-            const result=await this.model.findById(id);
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                throw new Error('Invalid ID format');
+            }
+            const result = await this.model.findById(id);
             return result;
         } catch (error) {
-            console.log("Something wrong at repository level in crud :",error);
+            console.log("Something wrong at repository level in crud:", error);
             throw error;
         }
     }

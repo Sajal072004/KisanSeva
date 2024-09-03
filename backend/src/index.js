@@ -6,6 +6,7 @@ import {PORT}  from '../config/server-config.js'
 import { connectDB } from '../config/db.js'
 import apiRoutes from '../routes/index.js'
 import cookieParser from 'cookie-parser'
+import { setupJobs } from '../utils/job.js'
 
 //Middlewares
 const app=express();
@@ -18,7 +19,9 @@ app.use(morgan('tiny'));        //for logging purpose
 app.disable('x-powered-by');    //less hackers will know about our stack
 
 //Db connection
-connectDB();
+connectDB().then(()=>{
+    setupJobs();
+});
 
 //Routes
 app.use('/api',apiRoutes);

@@ -30,6 +30,33 @@ const userSchema=new mongoose.Schema({
         type:Number,
         default:0
     },
+    isSeller: {
+        type: Boolean,
+        default: false
+    },
+    sellerInfo: {
+        accountNo: {
+            type: String,
+            validate: {
+                validator: function (v) {
+                    return /^\d{10,18}$/.test(v);  // Validates account number format
+                },
+                message: props => `${props.value} is not a valid account number!`
+            },
+        },
+        ifscCode: {
+            type: String,
+            validate: {
+                validator: function (v) {
+                    return /^[A-Z]{4}0[A-Z0-9]{6}$/.test(v);  // Example IFSC code validation
+                },
+                message: props => `${props.value} is not a valid IFSC code!`
+            },
+        },
+        bankName: {
+            type: String,
+        },
+    },
     
     
 },{timestamps:true});
