@@ -46,7 +46,7 @@ const createToken=(id)=>{
 }
 
 const registerUser=async(req,res)=>{
-    const {name,email,password,phone,address,gender}=req.body;
+    const {name,email,password,phone,state,gender,street,city,postalCode}=req.body;
     try {
         const exists=await userModel.findOne({email});
         if(exists){
@@ -73,9 +73,13 @@ const registerUser=async(req,res)=>{
             email:email,
             password:hashedPassword,
             phone:phone,
-            address:address,
-            gender:gender
+            street:street,
+            gender:gender,
+            city:city,
+            state:state,
+            postalCode:postalCode
         })
+        console.log(newUser);
 
         const user=await newUser.save();
         const token=createToken(user._id);

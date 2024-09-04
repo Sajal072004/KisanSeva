@@ -14,8 +14,20 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    address: {
+    street: {
         type: String,
+        required: true
+    },
+    city:{
+        type: String,
+        required: true
+    },
+    state:{
+        type: String,
+        required: true
+    },
+    postalCode: {
+        type: Number,
         required: true
     },
     phone: {
