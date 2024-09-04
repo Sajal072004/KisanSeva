@@ -25,6 +25,11 @@ const transactionSchema=new mongoose.Schema({
         type:Number,
     },
     date:{
-        type:Date
+        type:Date,
+        default:Date.now()
     }
 },{timestamps:true})
+
+const Transaction= mongoose.model('Transaction',transactionSchema);
+
+export default Transaction;

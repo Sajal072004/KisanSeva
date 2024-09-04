@@ -6,6 +6,7 @@ import createComment from '../../controller/comment-controller.js';
 import { forget, loginUser,registerUser, verify } from '../../controller/user-controller.js'
 import {createCrop, deleteCrop, getAllCrops, getCrop, updateCrop} from '../../controller/crop-controller.js'
 import { create, destroy, get, update } from '../../controller/seller-controller.js';
+import {createTransaction} from '../../controller/transaction-controller.js'
 
 const router=express.Router();
 
@@ -33,6 +34,9 @@ router.post('/seller',create);
 router.get('/seller/:id',get);
 router.delete('/seller/:id',destroy);
 router.patch('/seller/:id',update);
+
+
+router.post('/transaction',createTransaction);
 
 
 
