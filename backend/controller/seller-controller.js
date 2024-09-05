@@ -1,10 +1,25 @@
+import Seller from "../model/sellerModel.js";
 import SellerService from "../service/seller-service.js";
+import { validateAccountNumber } from "../utils/helper.js";
 
 const sellerService = new SellerService();
 
 const create = async (req, res) => {
     try {
-        const seller = await sellerService.create(req.body);
+        const { userId, accountNo, ifscCode, bank } = req.body;
+
+        // Check if the user is already a seller
+        const existingSeller = await Seller.findOne({ userId });
+        if (existingSeller) {
+            return res.status(400).send('User is already a seller.');
+        }
+
+        if(!validateAccountNumber(accountNo)){
+            return res.status(400).send('Please provide a valid account number');
+        }
+
+        const seller = new Seller({ userId, accountNo, ifscCode, bank });
+        await seller.save();
         return res.status(200).json({
             message: "Successfully created the seller profile",
             data: seller,
@@ -47,6 +62,9 @@ const get = async (req, res) => {
     try {
         const { id: userId } = req.query;  // Use URL parameters
         const response = await sellerService.getSeller(userId);
+        if(!response){
+            return res.status(400).send('User doesnt exist');
+        }
         return res.status(200).json({
             message: "Successfully fetched the seller details",
             data: response,

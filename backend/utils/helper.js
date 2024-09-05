@@ -1,3 +1,4 @@
+import axios from "axios";
 import Crop from "../model/cropModel.js";
 import CropRepository from "../repository/crop-repository.js";
 
@@ -38,7 +39,15 @@ async function updateExpiredCrops(){
 
 
 //validation check on account no
+export const validateAccountNumber = (accountNo) => {
+    // Account numbers can vary in length between banks, 
+    // but generally they are between 9 to 18 digits long.
+    const accountNoRegex = /^\d{9,18}$/;
 
+    return accountNoRegex.test(accountNo);
+};
+
+//validation check for ifsc code
 
 
 
