@@ -3,7 +3,7 @@ import express from 'express'
 import { createTweet,getAllTweetsOfUser,getTweet } from '../../controller/tweet-controller.js';
 import toggleLike from '../../controller/like-controller.js';
 import createComment from '../../controller/comment-controller.js';
-import { forget, loginUser,registerUser, verify } from '../../controller/user-controller.js'
+import { deleteUser, forget, getUser, loginUser,registerUser, updateUser, verifyOtp,resetPassword } from '../../controller/user-controller.js'
 import {createCrop, deleteCrop, getAllCrops, getCrop, updateCrop} from '../../controller/crop-controller.js'
 import { create, destroy, get, update } from '../../controller/seller-controller.js';
 import {createTransaction} from '../../controller/transaction-controller.js'
@@ -13,7 +13,11 @@ const router=express.Router();
 router.post('/user/signin',loginUser);
 router.post('/user/signup',registerUser);
 router.post('/user/forget',forget);
-router.post('/user/verify',verify);
+router.post('/user/verify',verifyOtp);
+router.post('/user/resetPassword',resetPassword)
+router.get('/user/:id',getUser);
+router.delete('/user/:id',deleteUser);
+router.patch('/user/:id',updateUser);
 
 router.post('/tweets',createTweet);
 router.get('/tweets/:id',getTweet);

@@ -1,4 +1,5 @@
 import userModel from "../model/userModel.js";
+import UserService from "../service/user-service.js";
 import validator from 'validator'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -42,20 +43,14 @@ const loginUser=async (req,res)=>{
 }
 
 const createToken=(id)=>{
-    return jwt.sign({id},JWT_SECRET,{expiresIn:'1h'});
+    return jwt.sign({id},JWT_SECRET,{expiresIn:'15d'});
 }
 
 const registerUser=async(req,res)=>{
     const {name,email,password,phone,state,gender,street,city,postalCode}=req.body;
     try {
         const exists=await userModel.findOne({email});
-        if(!exists){
-          return res.status(404).json({
-            message:'User does not exists',
-            data:{},
-            success:false
-          })
-        }
+        
         if(exists){
             return res.status(200).json({
                 message:"User already exists",
@@ -328,51 +323,124 @@ const forget=async (req,res)=>{
     }
 }
 
-const verify=async (req,res)=>{
-    const {otp,password}=req.body;
+const verifyOtp = async (req, res) => {
+  const { otp } = req.body;
 
-    try {
-        let user=await userModel.findOne({otp});
-        if(!user){
-            return res.status(404).json({
-                message:"User not found",
-                success:false
-            })
-        }
+  try {
+      const user = await userModel.findOne({ otp });
+      if (!user) {
+          return res.status(404).json({
+              message: "Invalid OTP",
+              success: false
+          });
+      }
 
-        const SALT=await bcrypt.genSalt(10);
-        const securePassword=await bcrypt.hash(password,SALT);
-
-        user=await userModel.findOneAndUpdate(
-            {otp},
-            {password:securePassword,otp:0},
-            {new:true}
-        );
-
-        return res.status(202).json({
-            message:"Password changed successfully",
-            success:true,
-            data:user
-        })
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message:"Internal Server error",
-            success:false,
-        })
-    }
+      // OTP is valid, user can proceed to reset password
+      return res.status(200).json({
+          message: "OTP verified successfully",
+          success: true
+      });
+  } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+          message: "Internal Server Error",
+          success: false
+      });
+  }
 }
 
+const resetPassword = async (req, res) => {
+  const { otp, password } = req.body;
+
+  try {
+      const user = await userModel.findOne({ otp });
+      if (!user) {
+          return res.status(404).json({
+              message: "Invalid OTP",
+              success: false
+          });
+      }
+
+      // Hash the new password
+      const SALT = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, SALT);
+
+      // Update the password and reset OTP
+      user.password = hashedPassword;
+      user.otp = 0;
+      await user.save();
+
+      return res.status(202).json({
+          message: "Password reset successfully",
+          success: true
+      });
+  } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+          message: "Internal Server Error",
+          success: false
+      });
+  }
+}
+
+const userService=new UserService();
 
 const updateUser=async(req,res)=>{
   try {
-    
+    const user=await userService.updateUser(req.query.id,req.body);
+    return res.status(200).json({
+      data:user,
+      success:true,
+      err:{},
+      message:"Successfully updated the user info"
+    })
   } catch (error) {
     console.log(error);
         res.status(500).json({
             message:"Internal Server error",
             success:false,
+            err:error.message,
+            data:{}
+      })
+  }
+}
+
+const deleteUser=async(req,res)=>{
+  try {
+    const user=await userService.deleteUser(req.query.id);
+    return res.status(200).json({
+      data:user,
+      success:true,
+      err:{},
+      message:"Successfully deleted the account"
+    })
+  } catch (error) {
+    console.log(error);
+        res.status(500).json({
+            message:"Internal Server error",
+            success:false,
+            err:error.message,
+            data:{}
+      })
+  }
+}
+
+const getUser=async(req,res)=>{
+  try {
+    const user=await userService.getUser(req.query.id);
+    return res.status(200).json({
+      data:user,
+      success:true,
+      err:{},
+      message:"Successfully fetched the user info"
+    })
+  } catch (error) {
+    console.log(error);
+        res.status(500).json({
+            message:"Internal Server error",
+            success:false,
+            err:error.message,
+            data:{}
       })
   }
 }
@@ -382,6 +450,11 @@ export {
     loginUser,
     registerUser,
     forget,
-    verify
+    verifyOtp,
+    resetPassword,
+    updateUser,
+    deleteUser,
+    getUser
+    
 }
 
