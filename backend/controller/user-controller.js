@@ -49,6 +49,13 @@ const registerUser=async(req,res)=>{
     const {name,email,password,phone,state,gender,street,city,postalCode}=req.body;
     try {
         const exists=await userModel.findOne({email});
+        if(!exists){
+          return res.status(404).json({
+            message:'User does not exists',
+            data:{},
+            success:false
+          })
+        }
         if(exists){
             return res.status(200).json({
                 message:"User already exists",
@@ -355,6 +362,19 @@ const verify=async (req,res)=>{
             success:false,
         })
     }
+}
+
+
+const updateUser=async(req,res)=>{
+  try {
+    
+  } catch (error) {
+    console.log(error);
+        res.status(500).json({
+            message:"Internal Server error",
+            success:false,
+      })
+  }
 }
 
 
