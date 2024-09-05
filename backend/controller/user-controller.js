@@ -310,6 +310,7 @@ const forget=async (req,res)=>{
             }
           }
           return res.status(202).json({
+            otp:generateOtp,
             message:"Otp sent successfully",
             success:true,
             data:info
@@ -337,6 +338,7 @@ const verifyOtp = async (req, res) => {
 
       // OTP is valid, user can proceed to reset password
       return res.status(200).json({
+          
           message: "OTP verified successfully",
           success: true
       });
