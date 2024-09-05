@@ -1,6 +1,6 @@
 import Seller from "../model/sellerModel.js";
 import SellerService from "../service/seller-service.js";
-import { validateAccountNumber } from "../utils/helper.js";
+import { validateAccountNumber, validateIFSC } from "../utils/helper.js";
 
 const sellerService = new SellerService();
 
@@ -16,6 +16,11 @@ const create = async (req, res) => {
 
         if(!validateAccountNumber(accountNo)){
             return res.status(400).send('Please provide a valid account number');
+        }
+
+        const isValidIFSC=await validateIFSC(ifscCode);
+        if (!isValidIFSC) {
+            return res.status(400).send('Please provide a valid IFSC code');
         }
 
         const seller = new Seller({ userId, accountNo, ifscCode, bank });

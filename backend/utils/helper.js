@@ -1,6 +1,7 @@
 import axios from "axios";
 import Crop from "../model/cropModel.js";
 import CropRepository from "../repository/crop-repository.js";
+import { IFSC_API_KEY } from "../config/server-config.js";
 
 const cropRepository=new CropRepository();
 
@@ -48,6 +49,32 @@ export const validateAccountNumber = (accountNo) => {
 };
 
 //validation check for ifsc code
+export const validateIFSC = async (ifscCode) => {
+    try {
+        const response = await axios.post(
+            'https://api.apyhub.com/validate/ifsc',
+            {
+                ifsc: ifscCode // Pass IFSC in the request body
+            },
+            {
+                headers: {
+                    'apy-token': IFSC_API_KEY, 
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        // If the response indicates the IFSC is valid
+        if (response.data && response.data.data && response.data.data.valid) {
+            return true;  // IFSC is valid
+        } else {
+            return false; // IFSC is invalid
+        }
+    } catch (error) {
+        console.error("Error validating IFSC code:", error.response?.data || error.message);
+        return false; // Handle errors gracefully, assume invalid if there's an issue
+    }
+};
 
 
 
