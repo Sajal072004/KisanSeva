@@ -82,6 +82,108 @@ const registerUser=async(req,res)=>{
         console.log(newUser);
 
         const user=await newUser.save();
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false, // Use `true` for port 465, `false` for other ports
+            auth: {
+                user: "krishiseva27@gmail.com",  // Your email address
+                pass: APP_PASS,  
+            },
+        });
+
+        const info = await transporter.sendMail({
+            from: "krishiseva@gmail.com",  // Sender address
+            to: email,  // Receiver's email
+            subject: "Welcome to Krishi Seva",  // Subject
+            html: `
+            <html>
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Welcome to Krishi Seva</title>
+              <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  margin: 0;
+                  padding: 0;
+                  background-color: #f4f4f4;
+                }
+                .container {
+                  width: 100%;
+                  max-width: 600px;
+                  margin: 0 auto;
+                  background-color: #ffffff;
+                  border-radius: 8px;
+                  overflow: hidden;
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                .header {
+                  background-color: #1b7a43; /* Dark Green */
+                  color: #ffffff;
+                  padding: 20px;
+                  text-align: center;
+                  font-size: 28px;
+                  font-weight: bold;
+                }
+                .content {
+                  padding: 20px;
+                }
+                .cta {
+                  background-color: #1b7a43; /* Dark Green */
+                  color: #ffffff;
+                  text-align: center;
+                  padding: 15px;
+                  border-radius: 5px;
+                  margin: 20px 0;
+                }
+                .cta a {
+                  color: #ffffff;
+                  text-decoration: none;
+                  font-weight: bold;
+                }
+                .footer {
+                  background-color: #f4f4f4;
+                  padding: 10px;
+                  text-align: center;
+                  font-size: 12px;
+                  color: #666666;
+                }
+                .footer a {
+                  color: #1b7a43; /* Dark Green */
+                  text-decoration: none;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  Krishi Seva
+                </div>
+                <div class="content">
+                  <p>Dear ${name},</p>
+                  <p>Thank you for signing up with Krishi Seva! We're thrilled to have you on board and are excited to support you with all your farming needs. Our platform offers a range of services and tools designed to help you succeed in your agricultural endeavors.</p>
+                  
+                  <p>We are committed to providing you with the best resources and support. If you have any questions or require assistance, please do not hesitate to reach out to our support team.</p>
+                  <p>Thank you once again for choosing Krishi Seva. We look forward to supporting your journey and helping you achieve your agricultural goals.</p>
+                </div>
+                <div class="cta">
+                  <p>Visit us at <a href="http://www.krishiseva.co" target="_blank" rel="noopener noreferrer">www.krishiseva.co</a> for more information and updates.</p>
+                </div>
+                <div class="footer">
+                  <p>&copy; 2024 Krishi Seva. All rights reserved.</p>
+                  <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+                </div>
+              </div>
+            </body>
+            </html>
+            `,  // HTML content
+          });
+          
+
+
         const token=createToken(user._id);
         res.status(202).json({
             message:"Verified token",
