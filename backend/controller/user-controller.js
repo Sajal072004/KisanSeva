@@ -31,7 +31,8 @@ const loginUser=async (req,res)=>{
         res.json({
             success:true,
             token:token,
-            data:user
+            data:user,
+            userId:user._id
         });
     } catch (error) {
         console.log(error);
@@ -190,7 +191,8 @@ const registerUser=async(req,res)=>{
         res.status(202).json({
             message:"Verified token",
             success:true,
-            token:token
+            token:token,
+            userId:user._id
         })
     } catch (error) {
         console.log(error);

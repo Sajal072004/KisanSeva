@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
     totalSpent: { // Tracks total money spent for buyers
         type: Number,
         default: 0
-    }
+    },
     
 }, { timestamps: true });
 

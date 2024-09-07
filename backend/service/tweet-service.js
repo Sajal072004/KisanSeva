@@ -46,6 +46,16 @@ class TweetService{
             return tweets;
         } catch (error) {
             console.log("Error in tweet service in fetching tweets",error);
+            throw error;
+        }
+    }
+
+    async getAllTweets(){
+        try {
+            // const tweets
+        } catch (error) {
+            console.log("Error in tweet service in fetching tweets",error);
+            throw error;
         }
     }
 
