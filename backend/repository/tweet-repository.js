@@ -39,9 +39,9 @@ class TweetRepository{
         }
     }
 
-    async getAll(offset,limit){             //sirf find karoge to saare aa jayenge
+    async getAll(){             //sirf find karoge to saare aa jayenge
         try {
-            const tweet=await Tweet.find().skip(offset).limit(limit);
+            const tweet=await Tweet.find().sort({ createdAt: -1 });
             return tweet;
         } catch (error) {
             console.log(error);

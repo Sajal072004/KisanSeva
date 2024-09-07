@@ -52,7 +52,8 @@ class TweetService{
 
     async getAllTweets(){
         try {
-            // const tweets
+            const tweets=await this.tweetRepository.getAll();
+            return tweets;
         } catch (error) {
             console.log("Error in tweet service in fetching tweets",error);
             throw error;

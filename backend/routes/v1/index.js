@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { createTweet,getAllTweetsOfUser,getTweet } from '../../controller/tweet-controller.js';
+import { createTweet,getAllTweets,getAllTweetsOfUser,getTweet } from '../../controller/tweet-controller.js';
 import toggleLike from '../../controller/like-controller.js';
 import createComment from '../../controller/comment-controller.js';
 import { deleteUser, forget, getUser, loginUser,registerUser, updateUser, verifyOtp,resetPassword } from '../../controller/user-controller.js'
@@ -24,6 +24,7 @@ router.patch('/user/:id',updateUser);
 router.post('/tweets',createTweet);
 router.get('/tweets/:id',getTweet);
 router.get('/mytweets/:id',getAllTweetsOfUser);
+router.get('/tweets',getAllTweets);
 router.post('/likes/toggle',toggleLike);
 router.post('/comments',createComment);
 
