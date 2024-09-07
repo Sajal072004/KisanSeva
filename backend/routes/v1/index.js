@@ -6,7 +6,7 @@ import createComment from '../../controller/comment-controller.js';
 import { deleteUser, forget, getUser, loginUser,registerUser, updateUser, verifyOtp,resetPassword } from '../../controller/user-controller.js'
 import {createCrop, deleteCrop, getAllCrops, getCrop, updateCrop} from '../../controller/crop-controller.js'
 import { create, destroy, get, update } from '../../controller/seller-controller.js';
-import {createTransaction} from '../../controller/transaction-controller.js'
+import {createTransaction, getLast10Transactions} from '../../controller/transaction-controller.js'
 
 const router=express.Router();
 
@@ -42,6 +42,7 @@ router.patch('/seller/:id',update);
 
 //transaction routes
 router.post('/transaction',createTransaction);
+router.get('/transaction/last-10',getLast10Transactions);
 
 
 

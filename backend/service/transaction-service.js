@@ -42,6 +42,15 @@ class TransactionService{
         }
     
     }
+
+    async getLast10Transactions(userId) {
+        try {
+            return await this.transactionRepository.getLast10Transactions(userId);
+        } catch (error) {
+            console.log("Something went wrong in transaction service", error);
+            throw error;
+        }
+    }
 }
 
 export default TransactionService;

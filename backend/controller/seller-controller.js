@@ -23,7 +23,7 @@ const create = async (req, res) => {
             return res.status(400).send('Please provide a valid IFSC code');
         }
 
-        const seller = new Seller({ userId, accountNo, ifscCode, bank });
+        const seller = await sellerService.create(req.body);
         await seller.save();
         return res.status(200).json({
             message: "Successfully created the seller profile",

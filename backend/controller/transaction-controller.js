@@ -43,4 +43,26 @@ const createTransaction = async (req, res) => {
     }
 };
 
-export { createTransaction };
+const getLast10Transactions = async (req, res) => {
+    try {
+        const { userId } = req.body;  // Extract userId from request body
+
+        // Fetch transactions
+        const transactions = await transactionService.getLast10Transactions(userId);
+
+        return res.status(200).json({
+            data: transactions,
+            success: true,
+            message: "Successfully fetched last 10 transactions"
+        });
+    } catch (error) {
+        console.log("Something went wrong in transaction-controller", error);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            err: error.message,
+            success: false
+        });
+    }
+};
+
+export { createTransaction,getLast10Transactions };

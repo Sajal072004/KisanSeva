@@ -67,6 +67,35 @@ class TransactionRepository{
             throw error;
         }
     }
+
+    async getLast10Transactions(userId) {
+        try {
+            const transactions = await Transaction.find({
+                $or: [
+                    { buyerId: userId },
+                    { sellerId: userId }
+                ]
+            })
+            .sort({ date: -1 }) 
+            .limit(10)
+            .lean();                    // to get js objects
+
+            const updatedTransactions = transactions.map(transaction => {
+                if (transaction.buyerId.toString() === userId.toString()) {
+                    transaction.transactionType = 'purchase';  
+                } 
+                else if (transaction.sellerId.toString() === userId.toString()) {
+                    transaction.transactionType = 'sale'; 
+                }
+                return transaction;
+            });
+
+            return updatedTransactions;
+        } catch (error) {
+            console.log("Something went wrong in fetching transactions", error);
+            throw error;
+        }
+    }
 }
 
 export default TransactionRepository;
