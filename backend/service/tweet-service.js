@@ -7,7 +7,7 @@ class TweetService{
     }
 
     async create(data){
-        const title=data.title;
+        // const title=data.title;
         const content=data.content;
 
         //hashtags will be in content
