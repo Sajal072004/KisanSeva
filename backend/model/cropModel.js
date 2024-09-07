@@ -51,7 +51,7 @@ const cropSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
-    userId:{
+    userId:{                //Seller's userId
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true

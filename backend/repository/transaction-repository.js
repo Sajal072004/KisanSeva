@@ -1,4 +1,6 @@
 import Transaction from "../model/transactionModel.js";
+import Crop from "../model/cropModel.js"
+import userModel from "../model/userModel.js";
 
 class TransactionRepository{
 
@@ -8,6 +10,60 @@ class TransactionRepository{
             return transaction;
         } catch (error) {
             console.log("Something went wrong in transaction repo",error);
+            throw error;
+        }
+    }
+
+    async updateCropQuantities(items) {
+        try {
+            const updateCrops = items.map(async (item) => {
+                const crop = await Crop.findById(item.cropId);
+                if (!crop) throw new Error('Crop not found');
+
+                if (crop.quantity < item.quantity) {
+                    throw new Error(`Not enough stock for crop: ${crop.name}`);
+                }
+
+                crop.quantity -= item.quantity;
+                if (crop.quantity === 0) {
+                    crop.status = 'OutOfStock'; // Update status if needed
+                }
+                return crop.save();
+            });
+
+            await Promise.all(updateCrops);
+        } catch (error) {
+            console.log("Something went wrong in updating crop quantities", error);
+            throw error;
+        }
+    }
+
+    async updateUserSpent(userId, amount) {
+        try {
+            const user = await userModel.findById(userId);
+            if (!user) throw new Error('User not found');
+
+            user.totalSpent += amount;
+            await user.save({ validateBeforeSave: false });
+
+            return user;
+        } catch (error) {
+            console.log("Something went wrong in updating user spent", error);
+            throw error;
+        }
+    }
+
+    async updateUserEarned(userId, amount) {
+        try {
+            const user = await userModel.findById(userId);
+            if (!user) throw new Error('User not found');
+
+            user.totalEarned += amount;
+            await user.save({ validateBeforeSave: false });
+
+            return user;
+        } catch (error) {
+            console.log("Something went wrong in updating user earned", error);
             throw error;
         }
     }

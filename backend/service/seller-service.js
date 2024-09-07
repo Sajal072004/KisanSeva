@@ -1,4 +1,5 @@
 import SellerRepository from "../repository/seller-repository.js";
+import userModel from "../model/userModel.js";
 
 class SellerService{
     constructor(){
@@ -7,7 +8,17 @@ class SellerService{
 
     async create(data){
         try {
-            const seller=await this.sellerRepository.create(data);
+            const user = await userModel.findById(data.userId);
+            if (user.isSeller) {
+                throw new Error('User is already a seller bsdk');
+            }
+
+            // Create seller profile
+            const seller = await this.sellerRepository.create(data);
+
+            // Update user to set isSeller = true
+            user.isSeller = true;
+            await user.save();
             return seller;
         } catch (error) {
             console.log("Something went wrong in seller-service layer",error);
@@ -18,6 +29,10 @@ class SellerService{
     async deleteSeller(userId){
         try {
            const response=await this.sellerRepository.deleteSeller(userId);
+
+           const user = await userModel.findById(userId);
+           user.isSeller = false;
+           await user.save();
            return response; 
         } catch (error) {
             console.log("Something went wrong in seller-service layer",error);

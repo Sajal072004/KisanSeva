@@ -1,25 +1,36 @@
 import mongoose from "mongoose";
 
-const transactionSchema=new mongoose.Schema({
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+const transactionSchema=new mongoose.Schema({                   //ek tarah se order model
+    buyerId: { // Renamed from userId to buyerId for clarity
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    cropId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Crop'
+    sellerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    quantity:{
-        type:Number,
-        required:true    
-    },
-    price:{
-        type:Number,
-        required:true
-    },
+    items: [{
+        cropId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Crop',
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        price: {
+            type: Number,
+            required: true
+        },
+    }],
     transactionType:{
         type:String,
-        enum:['purchase','sale']
+        enum:['purchase','sale'],
+        default:'purchase'
     },
     totalAmount:{
         type:Number,

@@ -42,6 +42,18 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    isSeller: {
+        type: Boolean,
+        default: false // true if the user is a seller
+    },
+    totalEarned: { // Tracks total earnings for sellers
+        type: Number,
+        default: 0
+    },
+    totalSpent: { // Tracks total money spent for buyers
+        type: Number,
+        default: 0
+    }
     
 }, { timestamps: true });
 
