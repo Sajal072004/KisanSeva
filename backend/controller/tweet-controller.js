@@ -48,7 +48,8 @@ export const getTweet=async (req,res)=>{
 
 export const getAllTweetsOfUser=async (req,res)=>{
     try {
-        const response=await tweetService.allTweetsOfUser(req.body.userId);
+        const {id}=req.params;
+        const response=await tweetService.allTweetsOfUser(id);
         console.log(response);
         return res.status(202).json({
             success:true,

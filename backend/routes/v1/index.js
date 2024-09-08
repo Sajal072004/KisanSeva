@@ -7,6 +7,7 @@ import { deleteUser, forget, getUser, loginUser,registerUser, updateUser, verify
 import {createCrop, deleteCrop, getAllCrops, getCrop, updateCrop} from '../../controller/crop-controller.js'
 import { create, destroy, get, update } from '../../controller/seller-controller.js';
 import {createTransaction, getLast10Transactions} from '../../controller/transaction-controller.js'
+import { addToCart, getCart, removeFromCart } from '../../controller/cart-controller.js';
 
 const router=express.Router();
 
@@ -45,6 +46,10 @@ router.patch('/seller/:id',update);
 router.post('/transaction',createTransaction);
 router.get('/transaction/last-10',getLast10Transactions);
 
+//cartData routes
+router.post('/cart/add',addToCart);
+router.post('/cart/remove',removeFromCart);
+router.post('/cart/get',getCart)
 
 
 export default router;

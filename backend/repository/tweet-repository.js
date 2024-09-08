@@ -57,6 +57,14 @@ class TweetRepository{
             console.log(error);
         }
     }
+
+    async findTweetIdByTitle(title){
+        try {
+            const id=await Tweet.findOne()
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 export default TweetRepository;

@@ -35,6 +35,19 @@ const transactionSchema=new mongoose.Schema({                   //ek tarah se or
     totalAmount:{
         type:Number,
     },
+    payment:{
+        type:Boolean,
+        default:false,
+    },
+    paymentMethod: {
+        type: String,
+        enum: ['stripe', 'paypal', 'cash'],
+        default: 'stripe'
+    },
+    address:{
+        type:String,
+        required:true
+    },
     date:{
         type:Date,
         default:Date.now()

@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    cartData:{
+        type:Object,
+        default:{}
+    }
     
 }, { timestamps: true });
 

@@ -431,7 +431,8 @@ const deleteUser=async(req,res)=>{
 
 const getUser=async(req,res)=>{
   try {
-    const user=await userService.getUser(req.query.id);
+    const {id}=req.params;
+    const user=await userService.getUser(id);
     return res.status(200).json({
       data:user,
       success:true,
