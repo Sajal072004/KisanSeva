@@ -20,6 +20,7 @@
     "emailjs": "^4.0.3",
     "emailjs-com": "^3.2.0",
     "express": "^4.19.2",
+    "firebase": "^10.13.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.2",

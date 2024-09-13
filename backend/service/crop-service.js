@@ -12,6 +12,7 @@ class CropService{
                 throw new Error ("Harvest date can't be after expiry date")
             }
             const crop=await this.cropRepository.create(data);
+            await crop.save();
             return crop;
 
         } catch (error) {

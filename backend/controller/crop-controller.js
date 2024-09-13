@@ -1,16 +1,39 @@
 import CropService from '../service/crop-service.js'
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import multer from 'multer';
+import firebaseConfig from '../config/server-config.js';
 
 const cropService=new CropService();
 
+initializeApp(firebaseConfig);
+
+// Initialize Firebase Cloud Storage
+const storage = getStorage();
+
+// Set up multer for file uploads
+const upload = multer({ storage: multer.memoryStorage() });
+
 const createCrop=async(req,res)=>{
     try {
-        console.log(req.body);
-        const crop=await cropService.createCrop(req.body);
+
+        let imageUrl = '';
+        if (req.file) {
+            const storageRef = ref(storage, `files/${Date.now()}_${req.file.originalname}`);
+            const metadata = { contentType: req.file.mimetype };
+            const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+            imageUrl = await getDownloadURL(snapshot.ref);
+        }
+
+        // console.log(req.body);
+        const cropData = { ...req.body, image: imageUrl };  // Add image URL to crop data
+        const crop = await cropService.createCrop(cropData);
         console.log(crop);
         return res.status(200).json({
             data:crop,
             success:true,
             message:"Successfully created the crop",
+            type: req.file.mimetype,
             err:{}
         })
     } catch (error) {
@@ -108,4 +131,4 @@ const updateCrop=async (req,res)=>{
     }
 }
 
-export {createCrop,getAllCrops,deleteCrop,getCrop,updateCrop}
+export {upload,createCrop,getAllCrops,deleteCrop,getCrop,updateCrop}
