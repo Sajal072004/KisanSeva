@@ -25,7 +25,7 @@ router.patch('/user/:id',updateUser);
 router.post('/tweets',createTweet);
 router.get('/tweets/:id',getTweet);
 router.get('/mytweets/:id',getAllTweetsOfUser);
-router.get('/tweets',getAllTweets);
+router.get('/tweets',getAllTweets); 
 router.post('/likes/toggle',toggleLike);
 router.post('/comments',createComment);
 
