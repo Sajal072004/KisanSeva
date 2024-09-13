@@ -15,7 +15,7 @@ function checkDates(harvestDate, expiryDate) {
 }
 
 function isExpired(expiryDate){
-    const expiry=new Date(expiryDate);
+    const expiry=new Date(expiryDate); 
     const currDate= new Date();
     return expiry<currDate;            //matlab expire ho gya hai 
 }

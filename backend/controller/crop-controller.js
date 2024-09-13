@@ -9,31 +9,34 @@ const cropService=new CropService();
 initializeApp(firebaseConfig);
 
 // Initialize Firebase Cloud Storage
-const storage = getStorage();
-
-// Set up multer for file uploads
-const upload = multer({ storage: multer.memoryStorage() });
+const firebaseStorage = getStorage(); // Use a distinct variable for Firebase storage
+const multerStorage = multer.memoryStorage(); // Store files in memory
+const upload = multer({ storage: multerStorage });
 
 const createCrop=async(req,res)=>{
+    // console.log('Files:', req.files); // Log the files to check if they are being received
+    // console.log('Body:', req.body);
     try {
 
-        let imageUrl = '';
-        if (req.file) {
-            const storageRef = ref(storage, `files/${Date.now()}_${req.file.originalname}`);
-            const metadata = { contentType: req.file.mimetype };
-            const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
-            imageUrl = await getDownloadURL(snapshot.ref);
+        const imageUrls = [];
+        if (req.files && req.files.length > 0) {
+            for (let file of req.files) {
+                console.log('Processing file:', file);
+                const storageRef = ref(firebaseStorage, `files/${Date.now()}_${file.originalname}`);
+                const metadata = { contentType: file.mimetype };
+                const snapshot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+                const imageUrl = await getDownloadURL(snapshot.ref);
+                imageUrls.push(imageUrl);
+            }
         }
-
         // console.log(req.body);
-        const cropData = { ...req.body, image: imageUrl };  // Add image URL to crop data
+        const cropData = { ...req.body, image: imageUrls};  // Add image URL to crop data
         const crop = await cropService.createCrop(cropData);
-        console.log(crop);
+        // console.log(crop);
         return res.status(200).json({
             data:crop,
             success:true,
             message:"Successfully created the crop",
-            type: req.file.mimetype,
             err:{}
         })
     } catch (error) {
@@ -50,7 +53,7 @@ const createCrop=async(req,res)=>{
 const getAllCrops=async (req,res)=>{
     try {
         const crops=await cropService.getAllCrops();
-        console.log(crops);
+        // console.log(crops);
         return res.status(200).json({
             data:crops,
             success:true,

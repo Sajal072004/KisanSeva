@@ -1,5 +1,5 @@
 import corn from 'node-cron'
-import CropRepository from '../repository/crop-repository.js'
+// import CropRepository from '../repository/crop-repository.js'
 import { updateExpiredCrops } from './helper.js'
 
 export const setupJobs=async ()=>{

@@ -30,7 +30,7 @@ router.post('/likes/toggle',toggleLike);
 router.post('/comments',createComment);
 
 //crop routes
-router.post('/crops',upload.single('filename'),createCrop);
+router.post('/crops',upload.array('images', 6),createCrop);
 router.get('/crops',getAllCrops);
 router.delete('/crops/:id',deleteCrop);
 router.patch('/crops/:id',updateCrop);      //localhost:3000/api/v1/crops/66d6204b7e43fbe262bc6d67

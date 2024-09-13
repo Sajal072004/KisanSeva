@@ -6,7 +6,7 @@ class CrudRepository{
     }
 
     async create(data){
-        console.log("Data to be created:", data);
+        // console.log("Data to be created:", data);
         try {
             const result=await this.model.create(data);
             console.log(result ,"This is made in crud repo",result);
