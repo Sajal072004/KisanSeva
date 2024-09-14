@@ -32,7 +32,9 @@ const loginUser=async (req,res)=>{
             success:true,
             token:token,
             data:user,
-            userId:user._id
+            userId:user._id,
+            // name: name,
+            // isSeller:isSeller
         });
     } catch (error) {
         console.log(error);
@@ -192,7 +194,8 @@ const registerUser=async(req,res)=>{
             message:"Verified token",
             success:true,
             token:token,
-            userId:user._id
+            userId:user._id,
+            data:user
         })
     } catch (error) {
         console.log(error);
