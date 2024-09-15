@@ -40,12 +40,12 @@ const cropSchema=new mongoose.Schema({
 
     harvestDate:{
         type:Date,
-        // required:true
+        required:true
     },
 
     expiryDate:{
         type:Date,
-        // required:true
+        required:true
     },
     Location:{
         type:String,
